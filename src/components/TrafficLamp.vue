@@ -37,7 +37,7 @@ export default {
         'lamp_yellow': this.color === 'yellow',
         'lamp_green': this.color === 'green',
         'lamp_active': this.isActive,
-        'lamp_blink': this.timer <= 3 && this.isActive
+        'lamp_blink': this.timer < 3 && this.isActive
       }
     }
   }

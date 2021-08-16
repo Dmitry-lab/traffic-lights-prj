@@ -25,8 +25,11 @@ export default {
   },
 
   mounted() {
-    this.counter = lightsSpec[this.activeLight].timer;
-    setInterval(this.countdown, TIMER_INTERVAL);
+    const savedState = JSON.parse(localStorage.getItem('saved-state'))
+    this.counter = savedState?.color === this.activeLight
+      ? savedState.counter
+      : lightsSpec[this.activeLight].timer
+    setInterval(this.countdown, TIMER_INTERVAL)
   },
 
   data() {
@@ -43,6 +46,14 @@ export default {
 
   watch: {
     counter(newValue) {
+      const savedState = {
+        counter: newValue,
+        color: this.activeLight,
+        prevLight: this.$route.params?.prevLight
+      }
+
+      localStorage.setItem('saved-state', JSON.stringify(savedState))
+
       if (newValue === 0) {
         this.activeLight === 'red' || this.activeLight === 'green'
           ? this.$router.push({name: 'Yellow', params: {prevLight: this.activeLight}})
